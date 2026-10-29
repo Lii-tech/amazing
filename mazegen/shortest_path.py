@@ -1,17 +1,3 @@
-"""
-Find the shortest path between the maze start and end positions.
-This function uses Breadth-First Search (BFS) to explore the maze.
-BFS visits positions level by level, which guarantees that the first time the end position is reached,
-the discovered path contains the minimum number of moves.
-The function only moves through open walls and ignores positions 
-that are outside the maze or have already been visited. 
-Args: maze: The MazeGenerator containing the maze grid, start position, and end position.
-Returns: A list of ``(row, column)`` coordinates representing
-the shortest path from the start position to the end position.
-The start and end positions are included in the returned list.
-Raises: ValueError: If there is no path between the start and end positions.
-"""
-
 from collections import deque
 from typing import TYPE_CHECKING
 
@@ -19,6 +5,21 @@ if TYPE_CHECKING:
     from .maze_generator import MazeGenerator 
 
 def shortest_path(maze: "MazeGenerator") -> list[tuple[int, int]]:
+    """
+    Find the shortest path between the maze start and end positions.
+    This function uses Breadth-First Search (BFS) to explore the maze.
+    BFS visits positions level by level, which guarantees that the first time the end position is reached,
+    the discovered path contains the minimum number of moves.
+    The function only moves through open walls and ignores positions 
+    that are outside the maze or have already been visited. 
+    Args: maze: The MazeGenerator containing the maze grid, start position, and end position.
+    Returns: A list of ``(row, column)`` coordinates representing
+    the shortest path from the start position to the end position.
+    The start and end positions are included in the returned list.
+    Raises: ValueError: If there is no path between the start and end positions.
+    """
+
+
     queue = deque([maze.start])
     previous = {maze.start: None}
 

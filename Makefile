@@ -1,8 +1,10 @@
+.PHONY: install run debug clean lint lint-strict
+
 run:
-	python -m mazegen.a_maze_ing mazegen/config.txt
+	python3 a_maze_ing.py config.txt
 
 debug:
-	python -m pdb -m mazegen.a_maze_ing
+	python3 -m pdb a_maze_ing.py config.txt
 
 clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} +

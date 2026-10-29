@@ -1,31 +1,25 @@
 import sys
 from parser import parsing
-from .maze_generator import MazeGenerator
-from .shortest_path import shortest_path
-from .output_file import output_file
-from .render import convert_to_binary, put_the_walls, border
-from .render import print_canvas
+from mazegen.maze_generator import MazeGenerator
+from mazegen.shortest_path import shortest_path
+from mazegen.output_file import output_file
+from render import convert_to_binary, put_the_walls, border
+from render import print_canvas
 
 # CHRISMAS theme
-WHITE = "\033[48;2;255;251;247m"
+GREEN = "\033[48;2;161;148;127m"
 DARK_GREEN = "\033[48;2;50;78;38m"
-BEIGE = "\033[48;2;189;161;134m"
 DARK_RED = "\033[48;2;94;28;35m"
-DUSTY_PINK = "\033[48;2;223;115;149m"
+DARK_BROWN = "\033[48;2;96;54;12m"
 # SUMMER theme
 VIOLET = "\033[48;2;113;25;113m"
 ORANGE = "\033[48;2;255;165;0m"
 GRASS = "\033[48;2;160;156;51m"
 LAVENDER = "\033[48;2;180;167;214m"
-GREEN = "\033[48;2;161;148;127m"
-DARK_GREY = "\033[48;2;96;82;70m"
 # SEA-PEACHE theme
-BABY_BLUE = "\033[48;2;175;215;255m"
 CREAM = "\033[48;2;255;242;204m"
+BABY_BLUE = "\033[48;2;175;215;255m"
 BABY_PINK = "\033[48;2;223;115;149m"
-LIGHT_GREEN = "\033[48;2;182;215;168m"
-LIGHT_RED = "\033[38;2;255;215;215m"
-DARK_BROWN = "\033[48;2;96;54;12m"
 BABY_GRASS = "\033[48;2;219;243;195m"
 # givin values
 MAZE_BG = [CREAM, GREEN, GRASS]
@@ -46,6 +40,17 @@ color = [
 
 
 def main_maze() -> None:
+    """ Entry point for the maze generator application.
+
+        1] Runs the maze generator application.
+        2]Reads and validates the configuration file, initializes the maze,
+        generates it, calculates the shortest path, and saves the maze
+        to an output file.
+        3] Displays the maze in the terminal and provides
+        a menu to regenerate the maze, show or hide the shortest path,
+        4] change the color theme, or exit the program.
+        5] Handles ValueError exceptions and keyboard interrupts.
+    """
     config_file = sys.argv[1]
     config = parsing(config_file)
     entry = (config["ENTRY"][1], config["ENTRY"][0])
@@ -163,15 +168,16 @@ def main_maze() -> None:
                 print("\033[0m\033[H\033[2J", end="")
                 print_canvas(borde)
             elif user == "4":
-                print("you exit the program")
+                print("OOPs! -YOU EXIT THE PROGRAM-")
                 sys.exit()
 
     except ValueError as e:
         print(e)
 
     except KeyboardInterrupt:
-        print("you exit the program")
+        print(" You exit the program!")
         sys.exit()
 
 
-main_maze()
+if __name__ == "__main__":
+    main_maze()

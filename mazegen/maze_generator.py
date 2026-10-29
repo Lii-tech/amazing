@@ -1,37 +1,23 @@
-"""
-Note for creating and using a MazeGenerator object:
 
-    generator = MazeGenerator(
-        height=20,
-        width=20,
-        perfect=True,
-        start=(0, 0),
-        end=(19, 19),
-        seed=42
-    )
-
-    generator.generator()
-
-Custom parameters can be passed when creating the generator,
-such as the maze size, start and end positions, generation mode,
-and random seed.
-
-The generated maze structure can be accessed through:
-
-    generator.grid
-    generator.grid.cells
-
-The solution can be accessed using:
-
-    solution = shortest_path(generator)
-"""
 from typing import Optional
 from .grid import Grid
 import random
 from .dfs import generate_perfect
 from .imperfect import generate_imperfect
 
+"""
+    Initializes the maze grid, start and end positions,
+    generation type,
+    and random number generator.
 
+    Args:
+        height: Number of rows in the maze.
+        width: Number of columns in the maze.
+        perfect: Whether to generate a perfect maze.
+        start: Starting cell coordinates.
+        end: Ending cell coordinates.
+        seed: Optional seed for reproducible random generation.
+"""
 class MazeGenerator:
     def __init__(
         self,
@@ -52,7 +38,6 @@ class MazeGenerator:
 
     def generator(self) -> None:
 
-
         """
     The generation functions are imported inside the method
     to avoid circular imports between the maze generator and the generation modules.
@@ -65,7 +50,7 @@ class MazeGenerator:
     from .imperfect import generate_imperfect
     """
 
-
+        self.grid = Grid(self.grid.row, self.grid.colm)
         if self.perfect:
             generate_perfect(self)
         else:

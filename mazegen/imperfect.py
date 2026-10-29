@@ -64,6 +64,7 @@ def try_break(grid: Grid, cell: Cell, nb: Cell, direct: str) -> bool:
 
 
 def count_loops(grid: Grid) -> int:
+    """Counts maze loops, excluding cells belonging to the 42 pattern."""
     edges = 0
     free = 0
     for row in grid.cells:

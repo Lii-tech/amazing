@@ -4,6 +4,7 @@ from typing import Any
 
 
 def perfect_parser(char: str) -> bool:
+    """Converts a string into a boolean value."""
     char = char.strip().lower()
 
     if char in ["true", "1"]:
@@ -15,6 +16,8 @@ def perfect_parser(char: str) -> bool:
 
 
 def entry_exit(c: str) -> tuple[int, int]:
+    """Parses and validates entry or exit coordinates."""
+
     s = c.split(",")
 
     if len(s) != 2:
@@ -33,6 +36,7 @@ def entry_exit(c: str) -> tuple[int, int]:
 
 
 def parsing(file_path: str) -> dict[str, Any]:
+    """Reads, parses, and validates the maze configuration file."""
     config: dict[str, Any] = {}
 
     if len(sys.argv) != 2:

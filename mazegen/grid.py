@@ -27,6 +27,8 @@ class Grid:
             self.cells.append(curr_row)
 
     def get_forbid(self, cell: Cell) -> list[str]:
+        """Returns directions that lead outside the maze boundaries."""
+
         forbidden = []
 
         if cell.row == 0:
@@ -43,6 +45,7 @@ class Grid:
     def get_neighbors(
         self, cell: Cell
     ) -> list[tuple[int, int, str]]:
+        """Returns valid neighboring cell coordinates and their directions."""
         nb: list[tuple[int, int, str]] = []
         directions = cell.neighbors
         forbid = self.get_forbid(cell)
