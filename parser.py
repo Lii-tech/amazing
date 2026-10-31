@@ -24,15 +24,14 @@ def entry_exit(c: str) -> tuple[int, int]:
         raise ValueError("Must contain only 2 integers!")
 
     try:
-        n = tuple(map(int, s))
+        x, y = tuple(map(int, s))
     except ValueError:
         raise ValueError("Must contain only 2 integers!")
 
-    for i in n:
-        if i < 0:
-            raise ValueError("Values must be non-negative!")
+    if x < 0 or y < 0:
+        raise ValueError("Values must be non-negative!")
     # must parse the case when both are zeros and parse the seed!!!!!
-    return n
+    return x, y
 
 
 def parsing(file_path: str) -> dict[str, Any]:
@@ -44,7 +43,6 @@ def parsing(file_path: str) -> dict[str, Any]:
 
     req = ["WIDTH", "HEIGHT", "ENTRY", "EXIT",
            "OUTPUT_FILE", "PERFECT", "SEED"]
-    sed = None
     try:
         with open(file_path, "r") as file:
             lines = file.read().splitlines()
@@ -66,12 +64,12 @@ def parsing(file_path: str) -> dict[str, Any]:
 
             if key not in req:
                 raise ValueError(f"Unknown key: {key}")
-            if sed == "SEED":
+            if key == "SEED":
                 if val.lower() in ("None", ""):
-                    config[sed] = None
+                    config[key] = None
                 else:
                     seed = int(val)
-                    config[sed] = seed
+                    config[key] = seed
 
                 if seed < 0:
                     print(

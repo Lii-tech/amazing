@@ -59,12 +59,12 @@ JUNCTIONS = {
 # taking the outfile output to decode it lol and use it to rendering the maze
 
 
-def convert_to_binary(output_file: str):
+def convert_to_binary(output_file: str) -> list[str]:
     """ Read the maze output file and convert
         its hexadecimal wall data into binary strings.
     """
     with open(output_file, "r") as file:
-        binary = []
+        binary: list[str] = []
         for line in file:
             # print("READ:", repr(line))
             if line.startswith("("):
@@ -81,7 +81,7 @@ def convert_to_binary(output_file: str):
     preserving ANSI colors and formatting."""
 
 
-def print_canvas(canvas):
+def print_canvas(canvas: list[list[str]]) -> None:
     for row in canvas:
         print("".join(cell * 2 for cell in row) + RESET)
         print(RESET, end="")
@@ -92,7 +92,7 @@ def print_canvas(canvas):
 # putting the walls in the border instead of building it then breaking it
 
 
-def put_the_walls(binary):
+def put_the_walls(binary: list[str]) -> list[list[str]]:
     walls = []
     i = 0
     for i in binary:
@@ -110,7 +110,7 @@ def put_the_walls(binary):
 
 
 # fixing corners after rendering the border and tha walls
-def fix_junctions(canvas: list) -> list:
+def fix_junctions(canvas: list[list[str]]) -> list[list[str]]:
     """ Replace cell intersections with the appropriate
         Unicode characters based on connected walls.
     """
@@ -141,7 +141,7 @@ def fix_junctions(canvas: list) -> list:
 
 
 def coloring_42(canvas: list[list[str]], maze: "MazeGenerator", color: str,
-                MAZE_BG: str):
+                MAZE_BG: str) -> list[list[str]]:
     """
     Apply the designated colors to the cells
     belonging to the 42 pattern and its connections.
@@ -223,7 +223,7 @@ def color_walls(canvas: list[list[str]],
 
 def coloring_entry_exit(canvas: list[list[str]],
                         maze: "MazeGenerator", color: str,
-                        MAZE_BG: str):
+                        MAZE_BG: str) -> list[list[str]]:
 
     """
     Highlight the maze's entry and exit
@@ -265,7 +265,7 @@ def border(maze: "MazeGenerator",
            path: list[tuple[int, int]],
            directions: list[list[str]],
            file: str, color: list[list[str]],
-           theme: int, value: int) -> list:
+           theme: int, value: int) -> list[list[str]]:
     """
     Creates the maze canvas, draws its border, renders the maze,
     fixes junctions, and applies wall colors.

@@ -25,7 +25,8 @@ def shortest_path(maze: "MazeGenerator") -> list[tuple[int, int]]:
     """
 
     queue = deque([maze.start])
-    previous = {maze.start: None}
+    previous: dict[tuple[int, int],
+                   tuple[int, int] | None] = {maze.start: None}
 
     directions = {
         "N": (-1, 0),
@@ -58,8 +59,8 @@ def shortest_path(maze: "MazeGenerator") -> list[tuple[int, int]]:
     if maze.end not in previous:
         raise ValueError(f"no path exist between the start:{maze.start}"
                          f"and the end:{maze.end}")
-    path = []
-    current = maze.end
+    path: list[tuple[int, int]] = []
+    current: tuple[int, int] | None = maze.end
 
     while current is not None:
         path.append(current)
