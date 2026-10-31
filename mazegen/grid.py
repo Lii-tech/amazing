@@ -11,6 +11,7 @@ Each cell can be accessed using ``cells[row][colm]``.
 
 from .cell import Cell
 
+
 class Grid:
     def __init__(self, height: int, width: int):
         self.row = height

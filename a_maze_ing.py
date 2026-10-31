@@ -3,8 +3,8 @@ from parser import parsing
 from mazegen.maze_generator import MazeGenerator
 from mazegen.shortest_path import shortest_path
 from mazegen.output_file import output_file
-from render import convert_to_binary, put_the_walls, border
-from render import print_canvas
+from renderer import convert_to_binary, put_the_walls, border
+from renderer import print_canvas
 
 # CHRISMAS theme
 GREEN = "\033[48;2;161;148;127m"
@@ -43,7 +43,7 @@ def main_maze() -> None:
     """ Entry point for the maze generator application.
 
         1] Runs the maze generator application.
-        2]Reads and validates the configuration file, initializes the maze,
+        2] Reads and validates the configuration file, initializes the maze,
         generates it, calculates the shortest path, and saves the maze
         to an output file.
         3] Displays the maze in the terminal and provides
@@ -142,7 +142,7 @@ def main_maze() -> None:
             elif user == "3":
                 print("\nTHE AVAILABLE THEMES:")
                 print("[1]. SEA-PEACHE")
-                print("[2.  CHRISMAS")
+                print("[2].  CHRISMAS")
                 print("[3]. SUMMER")
                 choice = input("\nCHOOSE ONE PLEASE: ")
 

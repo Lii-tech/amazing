@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 from enum import Enum
-from mazegen.output_file import output_file
 from mazegen.pattern import pattern_cells
 
 if TYPE_CHECKING:
@@ -11,7 +10,7 @@ RESET = "\033[0m"
 BOLD = "\033[1m"
 
 
-#naming the unicode characters for the usability
+# naming the unicode characters for the usability
 class Chars(Enum):
     MD = "\u2533"   # ┳ middle, down
     MU = "\u253B"   # ┻ middle, up
@@ -30,7 +29,9 @@ class Chars(Enum):
 
     CC = "\u254B"   # ╋ cross
 
-#to fix corners in the maze
+# to fix corners in the maze
+
+
 JUNCTIONS = {
     "": " ",
 
@@ -55,7 +56,9 @@ JUNCTIONS = {
     "NSEW": Chars.CC.value,
 }
 
-#taking the outfile output to decode it lol and use it to rendering the maze
+# taking the outfile output to decode it lol and use it to rendering the maze
+
+
 def convert_to_binary(output_file: str):
     """ Read the maze output file and convert
         its hexadecimal wall data into binary strings.
@@ -63,28 +66,33 @@ def convert_to_binary(output_file: str):
     with open(output_file, "r") as file:
         binary = []
         for line in file:
-            #print("READ:", repr(line))
+            # print("READ:", repr(line))
             if line.startswith("("):
                 break
             for digit in line.strip():
-                #print("DIGIT:", repr(line))
+                # print("DIGIT:", repr(line))
                 b = int(digit, 16)
                 b = bin(b)[2:]
                 binary.append(b.zfill(4))
     return binary
 
-"""print the maze canvas to the terminal,preserving ANSI colors and formatting."""
+
+"""print the maze canvas to the terminal,
+    preserving ANSI colors and formatting."""
+
+
 def print_canvas(canvas):
-        
     for row in canvas:
         print("".join(cell * 2 for cell in row) + RESET)
         print(RESET, end="")
 
 
-""" Convert each cell's binary wall representation into a list of wall directions."""
-#putting the walls in the border instead of building it then breaking it 
+"""Convert each cell's binary wall
+    representation into a list of wall directions."""
+# putting the walls in the border instead of building it then breaking it
+
+
 def put_the_walls(binary):
-  
     walls = []
     i = 0
     for i in binary:
@@ -101,7 +109,7 @@ def put_the_walls(binary):
     return walls
 
 
-#fixing corners after rendering the border and tha walls 
+# fixing corners after rendering the border and tha walls
 def fix_junctions(canvas: list) -> list:
     """ Replace cell intersections with the appropriate
         Unicode characters based on connected walls.
@@ -132,13 +140,12 @@ def fix_junctions(canvas: list) -> list:
     return canvas
 
 
-def coloring_42(canvas: list[list[str]], maze: "MazeGenerator",color: str,
-    MAZE_BG: str):
-    
-    """ Apply the designated colors to the cells
-        belonging to the 42 pattern and its connections.
+def coloring_42(canvas: list[list[str]], maze: "MazeGenerator", color: str,
+                MAZE_BG: str):
     """
-    
+    Apply the designated colors to the cells
+    belonging to the 42 pattern and its connections.
+    """
     pattern = set(pattern_cells(maze))
     for row, col in pattern_cells(maze):
         canvas_row = row * 2 + 1
@@ -146,14 +153,17 @@ def coloring_42(canvas: list[list[str]], maze: "MazeGenerator",color: str,
         canvas[canvas_row][canvas_col] = f"{MAZE_BG}{color} {RESET}{MAZE_BG}"
 
         # Connect to the cell on the right, but never paint over a wall
-        if (row, col + 1) in pattern and canvas[canvas_row][canvas_col + 1] != Chars.HL.value:
+        right_open = canvas[canvas_row][canvas_col + 1] != Chars.HL.value
+        if (row, col + 1) in pattern and right_open:
             canvas[canvas_row][canvas_col + 1] = f"{color} {RESET}{MAZE_BG}"
 
         # Connect to the cell below, but never paint over a wall
-        if (row + 1, col) in pattern and canvas[canvas_row + 1][canvas_col] != Chars.VL.value:
+        below_open = canvas[canvas_row + 1][canvas_col] != Chars.VL.value
+        if (row + 1, col) in pattern and below_open:
             canvas[canvas_row + 1][canvas_col] = f"{color} {RESET}{MAZE_BG}"
 
     return canvas
+
 
 def colored_path(
     canvas: list[list[str]],
@@ -161,11 +171,9 @@ def colored_path(
     color: str,
     MAZE_BG: str
 ) -> list[list[str]]:
-    
     """ Color the cells and connecting passages
         along the calculated solution path.
     """
-    
     for i in range(len(path)):
         row, col = path[i]
 
@@ -196,10 +204,13 @@ def colored_path(
 
     return canvas
 
-def color_walls(canvas: list[list[str]], color: list[list[str]], MAZE_BG: str) -> list[list[str]]:
 
-    """ Apply the wall color and maze background
-        color to the canvas's non-empty characters.
+def color_walls(canvas: list[list[str]],
+                color: list[list[str]], MAZE_BG: str) -> list[list[str]]:
+
+    """
+    Apply the wall color and maze background
+    color to the canvas's non-empty characters.
     """
 
     for r in range(len(canvas)):
@@ -209,12 +220,14 @@ def color_walls(canvas: list[list[str]], color: list[list[str]], MAZE_BG: str) -
 
     return canvas
 
-def coloring_entry_exit(canvas: list[list[str]],
-    maze: "MazeGenerator",color: str,
-    MAZE_BG: str):
 
-    """ Highlight the maze's entry and exit
-        cells using the designated color.
+def coloring_entry_exit(canvas: list[list[str]],
+                        maze: "MazeGenerator", color: str,
+                        MAZE_BG: str):
+
+    """
+    Highlight the maze's entry and exit
+    cells using the designated color.
     """
 
     entr_row = maze.start[0] * 2 + 1
@@ -227,6 +240,7 @@ def coloring_entry_exit(canvas: list[list[str]],
     canvas[exit_row][exit_col] = f"{color} {RESET}{MAZE_BG}"
 
     return canvas
+
 
 def colored_cell(
     canvas: list[list[str]],
@@ -241,9 +255,11 @@ def colored_cell(
         for col in range(maze.grid.colm):
             canvas_row = row * 2 + 1
             canvas_col = col * 2 + 1
-            canvas[canvas_row][canvas_col] = f"{MAZE_BG}{color} {RESET}{MAZE_BG}"
+            canvas[canvas_row][canvas_col] = (
+                f"{MAZE_BG}{color} {RESET}{MAZE_BG}")
 
     return canvas
+
 
 def border(maze: "MazeGenerator",
            path: list[tuple[int, int]],
@@ -267,14 +283,13 @@ def border(maze: "MazeGenerator",
         The completed maze canvas.
     """
 
-    rows = maze.grid.row * 2 + 1 
+    rows = maze.grid.row * 2 + 1
     cols = maze.grid.colm * 2 + 1
 
     if cols % 2 == 0:
         cols = cols + 1
 
     canvas = [[" "] * cols for _ in range(rows)]
-
 
     canvas[0][0] = Chars.RRC.value
     for col in range(1, cols):
@@ -286,7 +301,6 @@ def border(maze: "MazeGenerator",
         canvas[rows - 1][col] = Chars.HL.value
     canvas[rows - 1][cols - 1] = Chars.LDC.value
 
-
     for row in range(1, rows - 1):
         canvas[row][0] = Chars.VL.value
         canvas[row][cols - 1] = Chars.VL.value
@@ -296,12 +310,13 @@ def border(maze: "MazeGenerator",
     binary = convert_to_binary(file)
     draw_wall = put_the_walls(binary)
     canvas = rendering(canvas, maze, path, draw_wall,
-                        maze.grid.row, maze.grid.colm,
-                        color, theme, value)
+                       maze.grid.row, maze.grid.colm,
+                       color, theme, value)
     canvas = fix_junctions(canvas)
     canvas = color_walls(canvas, wall, bg)
 
     return canvas
+
 
 def rendering(canvas: list[list[str]],
               maze: "MazeGenerator",
@@ -347,7 +362,6 @@ def rendering(canvas: list[list[str]],
             if direct == "W":
                 canvas[canvas_row][canvas_col - 1] = Chars.VL.value
 
-
     ft = color[1][theme]      # 42 pattern
     pc = color[2][theme]      # path
     points = color[3][theme]  # entry/exit
@@ -358,11 +372,7 @@ def rendering(canvas: list[list[str]],
     if value:
         canvas = colored_path(canvas, path, pc, bg)
 
-
     canvas = coloring_42(canvas, maze, ft, bg)
     canvas = coloring_entry_exit(canvas, maze, points, bg)
 
     return canvas
-
-
-

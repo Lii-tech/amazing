@@ -31,7 +31,7 @@ def entry_exit(c: str) -> tuple[int, int]:
     for i in n:
         if i < 0:
             raise ValueError("Values must be non-negative!")
-    #must parse the case when both are zeros and parse the seed!!!!!
+    # must parse the case when both are zeros and parse the seed!!!!!
     return n
 
 
@@ -42,7 +42,8 @@ def parsing(file_path: str) -> dict[str, Any]:
     if len(sys.argv) != 2:
         raise ValueError("Expected exactly one config file!")
 
-    req = ["WIDTH", "HEIGHT", "ENTRY", "EXIT", "OUTPUT_FILE", "PERFECT", "SEED"]
+    req = ["WIDTH", "HEIGHT", "ENTRY", "EXIT",
+           "OUTPUT_FILE", "PERFECT", "SEED"]
     sed = None
     try:
         with open(file_path, "r") as file:
@@ -83,7 +84,8 @@ def parsing(file_path: str) -> dict[str, Any]:
         # Check for missing keys
         for word in req:
             if word not in config:
-                raise ValueError(f"Missing mandatory configuration key: {word}")
+                raise ValueError("Missing mandatory"
+                                 f"configuration key: {word}")
 
         # Parse WIDTH and HEIGHT
         try:
@@ -123,7 +125,7 @@ def parsing(file_path: str) -> dict[str, Any]:
         #  checkin the the border of the exit inside the maze
         if not (0 <= ext[0] < width and 0 <= ext[1] < height):
             raise ValueError("EXIT is outside the maze!")
-          #checkin any error could occuar during the compilation
+        # checkin any error could occuar during the compilation
     except FileNotFoundError:
         print(f"Error: The configuration file '{file_path}' was not found!")
         sys.exit(1)

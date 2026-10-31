@@ -1,9 +1,10 @@
-import random
-from typing import Tuple, List, TYPE_CHECKING
+from typing import TYPE_CHECKING
 from .cell import Cell
 from .grid import Grid
 from .dfs import generate_perfect
 from .pattern import check_42
+
+
 if TYPE_CHECKING:
     from .maze_generator import MazeGenerator
 
@@ -113,8 +114,3 @@ def generate_imperfect(maze: "MazeGenerator") -> None:
             continue
         r, c, d = rng.choice(nbs)
         try_break(grid, cell, grid.cells[r][c], d)
-
-
-
-
-

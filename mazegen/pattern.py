@@ -20,21 +20,23 @@ def pattern_origin(maze: "MazeGenerator") -> tuple[int, int]:
     Calculate the top-left position of the 42 pattern.
     The pattern is positioned approximately in the center of the maze.
     Args: maze: The MazeGenerator containing the maze dimensions.
-    Returns: A ``(row, column)`` tuple representing the top-left position of the 42 pattern.
-"""
-    col0 = round(maze.grid.row - PAT_W )// 2
-    row0 = round(maze.grid.colm - PAT_H)// 2
+    Returns: A ``(row, column)``
+    tuple representing the top-left position of the 42 pattern.
+    """
+    col0 = round(maze.grid.row - PAT_W) // 2
+    row0 = round(maze.grid.colm - PAT_H) // 2
     return row0, col0
 
 
 def pattern_cells(maze: "MazeGenerator") -> set[tuple[int, int]]:
     """
     Return the maze coordinates occupied by the 42 pattern.
-    The coordinates stored in ``closed_cells`` are relative to the pattern's origin.
+    The coordinates stored in ``closed_cells``
+    are relative to the pattern's origin.
     They are converted into actual maze coordinates using ``pattern_origin()``.
     Args: maze: The MazeGenerator containing the maze dimensions.
-    Returns: A set of ``(row, column)`` coordinates belonging to the 42 pattern.
-"""
+    Returns: A set of ``(row, column)``coordinates belonging to the 42 pattern.
+    """
     row0, col0 = pattern_origin(maze)
     return {(row0 + r, col0 + c) for r, c in closed_cells}
 
@@ -44,8 +46,9 @@ def in_42_pattern(maze: "MazeGenerator", point: tuple[int, int]) -> bool:
     Check whether a coordinate belongs to the 42 pattern.
     Args: maze: The MazeGenerator containing the maze dimensions.
     point: The ``(row, column)`` coordinate to check.
-    Returns: ``True`` if the coordinate belongs to the 42 pattern, otherwise ``False``.
-"""
+    Returns: ``True`` if the coordinate belongs to the 42 pattern,
+    otherwise ``False``.
+    """
     return point in pattern_cells(maze)
 
 
@@ -77,4 +80,3 @@ def check_42(maze: "MazeGenerator") -> None:
 
     for r, c in cells:
         maze.grid.cells[r][c].visited = True
-
