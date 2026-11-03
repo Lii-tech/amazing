@@ -66,14 +66,12 @@ def convert_to_binary(output_file: str) -> list[str]:
     with open(output_file, "r") as file:
         binary: list[str] = []
         for line in file:
-            # print("READ:", repr(line))
             if line.startswith("("):
                 break
             for digit in line.strip():
-                # print("DIGIT:", repr(line))
-                b = int(digit, 16)
-                b = bin(b)[2:]
-                binary.append(b.zfill(4))
+                decimal: int = int(digit, 16)
+                bits: str = bin(decimal)[2:]
+                binary.append(bits.zfill(4))
     return binary
 
 
@@ -94,7 +92,6 @@ def print_canvas(canvas: list[list[str]]) -> None:
 
 def put_the_walls(binary: list[str]) -> list[list[str]]:
     walls = []
-    i = 0
     for i in binary:
         cell = []
         if i[0] == "1":
@@ -206,7 +203,7 @@ def colored_path(
 
 
 def color_walls(canvas: list[list[str]],
-                color: list[list[str]], MAZE_BG: str) -> list[list[str]]:
+                color: str, MAZE_BG: str) -> list[list[str]]:
 
     """
     Apply the wall color and maze background
@@ -323,7 +320,7 @@ def rendering(canvas: list[list[str]],
               path: list[tuple[int, int]],
               draw_wall: list[list[str]],
               rows: int, cols: int,
-              color: str, theme: int,
+              color: list[list[str]], theme: int,
               value: int) -> list[list[str]]:
 
     """

@@ -28,6 +28,7 @@ def shortest_path(maze: "MazeGenerator") -> list[tuple[int, int]]:
     previous: dict[tuple[int, int],
                    tuple[int, int] | None] = {maze.start: None}
 
+# This tells your algorithm how to move between neighboring cells.
     directions = {
         "N": (-1, 0),
         "E": (0, 1),
@@ -60,11 +61,11 @@ def shortest_path(maze: "MazeGenerator") -> list[tuple[int, int]]:
         raise ValueError(f"no path exist between the start:{maze.start}"
                          f"and the end:{maze.end}")
     path: list[tuple[int, int]] = []
-    current: tuple[int, int] | None = maze.end
+    step: tuple[int, int] | None = maze.end
 
-    while current is not None:
-        path.append(current)
-        current = previous[current]
+    while step is not None:
+        path.append(step)
+        step = previous[step]
 
     path.reverse()
     return path
