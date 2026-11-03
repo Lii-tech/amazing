@@ -142,7 +142,7 @@ def main_maze() -> None:
             elif user == "3":
                 print("\nTHE AVAILABLE THEMES:")
                 print("[1]. SEA-PEACHE")
-                print("[2].  CHRISMAS")
+                print("[2]. CHRISMAS")
                 print("[3]. SUMMER")
                 choice = input("\nCHOOSE ONE PLEASE: ")
 

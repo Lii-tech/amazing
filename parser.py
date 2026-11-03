@@ -42,7 +42,9 @@ def parsing(file_path: str) -> dict[str, Any]:
         raise ValueError("Expected exactly one config file!")
 
     req = ["WIDTH", "HEIGHT", "ENTRY", "EXIT",
-           "OUTPUT_FILE", "PERFECT", "SEED"]
+           "OUTPUT_FILE", "PERFECT"]
+    optional = ["SEED"]
+    allowed = req + optional
     try:
         with open(file_path, "r") as file:
             lines = file.read().splitlines()
@@ -62,21 +64,25 @@ def parsing(file_path: str) -> dict[str, Any]:
             key = key.strip().upper()
             val = val.strip()
 
-            if key not in req:
+            if key not in allowed:
                 raise ValueError(f"Unknown key: {key}")
+
             if key == "SEED":
-                if val.lower() in ("None", ""):
+                if val.lower() in ("none", ""):
                     config[key] = None
                 else:
-                    seed = int(val)
+                    try:
+                        seed = int(val)
+                    except ValueError:
+                        raise ValueError("SEED must be an integer!")
+                    if seed < 0:
+                        print(
+                            "Warning! Negative and positive seed number "
+                            "behavior is identical"
+                        )
+
                     config[key] = seed
-
-                if seed < 0:
-                    print(
-                        "Warning! Negative and positive seed number "
-                        "behavior is identical"
-                    )
-
+                continue
             config[key] = val
 
         # Check for missing keys
@@ -85,6 +91,8 @@ def parsing(file_path: str) -> dict[str, Any]:
                 raise ValueError("Missing mandatory"
                                  f"configuration key: {word}")
 
+        # SEED not provided -> no fixed seed
+        config.setdefault("SEED", None)
         # Parse WIDTH and HEIGHT
         try:
             config["WIDTH"] = int(config["WIDTH"])
