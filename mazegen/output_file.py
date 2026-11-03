@@ -4,6 +4,9 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .maze_generator import MazeGenerator
 
+# Subject encoding: a SET bit means the wall is CLOSED.
+# bit 0 = North, bit 1 = East, bit 2 = South, bit 3 = West
+WALL_BITS = {"N": 1, "E": 2, "S": 4, "W": 8}
 
 def convert_path(path: list[tuple[int, int]]) -> str:
     """
@@ -56,24 +59,18 @@ def output_file(maze: "MazeGenerator", mazefile: str,
         with open(mazefile, "w") as file:
             for row in maze.grid.cells:
                 for cell in row:
-                    cells = cell.walls
-                    digit = []
-                    for value in cells.values():
-                        if value is False:
-                            digit.append(0)
-                        if value is True:
-                            digit.append(1)
-                    output = "".join(str(i) for i in digit)
-                    number = int(output, 2)
-                    dec = hex(number)[-1]
-                    file.write(dec.upper())
+                    number = sum(
+                        WALL_BITS[side]
+                        for side, closed in cell.walls.items()
+                        if closed
+                    )
+                    file.write(f"{number:X}")
                 file.write("\n")
-            shortest_path = convert_path(path)
             file.write("\n")
-            file.write(f"({maze.start[0]}, {maze.start[1]})")
+            file.write(f"{maze.start[1]},{maze.start[0]}")
             file.write("\n")
-            file.write(f"({maze.end[0]}, {maze.end[1]})")
+            file.write(f"{maze.end[1]},{maze.end[0]}")
             file.write("\n")
-            file.write(shortest_path)
+            file.write(convert_path(path))
     except OSError as e:
-        print(f"Error writing to file{mazefile}: {e}")
+        print(f"Error writing to file {mazefile}: {e}")

@@ -434,9 +434,8 @@ Replace the placeholders below with the actual team members and their responsibi
 
 | Team Member | Responsibilities                                                                     |
 | ----------- | ------------------------------------------------------------------------------------ |
-| `<login1>`  | `<Describe the modules implemented, tests performed, and responsibilities handled.>` |
-| `<login2>`  | `<Describe the modules implemented, tests performed, and responsibilities handled.>` |
-| `<login3>`  | `<Describe the modules implemented, tests performed, and responsibilities handled.>` |
+| `<leobeida>`  | `<[grid, cell, maze_generator, dfs, pattern, imperfect, renderer]modules implemented, tests performed, and responsibilities handled.>` |
+| `<aalorsan>`  | `<[shortest-path, OUTPUT_FILE, parser] modules implemented and tests performed and responsibilities handled>` |
 
 If there are fewer or more team members, adjust the table accordingly.
 
@@ -552,5 +551,5 @@ AI-generated code or explanations should be reviewed and tested by the team. Eac
 
 This project is part of the 42 curriculum.
 
-If the repository includes a `LICENSE` file, consult that file for the applicable licensing terms.
+If the repository includes a `LICENSE.md` file, consult that file for the applicable licensing terms.
 

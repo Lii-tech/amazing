@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from enum import Enum
-from mazegen.pattern import pattern_cells
+from mazegen.pattern import pattern_cells, too_small
 
 if TYPE_CHECKING:
     from mazegen.maze_generator import MazeGenerator
@@ -68,6 +68,8 @@ def convert_to_binary(output_file: str) -> list[str]:
         for line in file:
             if line.startswith("("):
                 break
+            if not line.strip():          # blank line = end of the grid
+                break
             for digit in line.strip():
                 decimal: int = int(digit, 16)
                 bits: str = bin(decimal)[2:]
@@ -93,18 +95,9 @@ def print_canvas(canvas: list[list[str]]) -> None:
 def put_the_walls(binary: list[str]) -> list[list[str]]:
     walls = []
     for i in binary:
-        cell = []
-        if i[0] == "1":
-            cell.append("N")
-        if i[1] == "1":
-            cell.append("E")
-        if i[2] == "1":
-            cell.append("S")
-        if i[3] == "1":
-            cell.append("W")
-        walls.append(cell)
+        value = int(i, 2)
+        walls.append([d for d, bit in (("N", 1), ("E", 2), ("S", 4), ("W", 8)) if value & bit])
     return walls
-
 
 # fixing corners after rendering the border and tha walls
 def fix_junctions(canvas: list[list[str]]) -> list[list[str]]:
@@ -143,7 +136,11 @@ def coloring_42(canvas: list[list[str]], maze: "MazeGenerator", color: str,
     Apply the designated colors to the cells
     belonging to the 42 pattern and its connections.
     """
+    if too_small(maze):
+        return canvas
+
     pattern = set(pattern_cells(maze))
+
     for row, col in pattern_cells(maze):
         canvas_row = row * 2 + 1
         canvas_col = col * 2 + 1

@@ -23,8 +23,8 @@ def pattern_origin(maze: "MazeGenerator") -> tuple[int, int]:
     Returns: A ``(row, column)``
     tuple representing the top-left position of the 42 pattern.
     """
-    col0 = round(maze.grid.row - PAT_W) // 2
-    row0 = round(maze.grid.colm - PAT_H) // 2
+    col0 = round(maze.grid.colm - PAT_W) // 2
+    row0 = round(maze.grid.row - PAT_H) // 2
     return row0, col0
 
 
@@ -51,6 +51,15 @@ def in_42_pattern(maze: "MazeGenerator", point: tuple[int, int]) -> bool:
     """
     return point in pattern_cells(maze)
 
+def too_small(maze: "MazeGenerator") -> bool:
+    """ Skips the pattern if the maze is too small."""
+    row0, col0 = pattern_origin(maze)
+    return (
+        row0 < 1
+        or col0 < 1
+        or row0 + PAT_H > maze.grid.row - 1
+        or col0 + PAT_W > maze.grid.colm - 1
+    )
 
 def check_42(maze: "MazeGenerator") -> None:
     """
@@ -60,15 +69,7 @@ def check_42(maze: "MazeGenerator") -> None:
     the entry or exit is inside the pattern. Pattern cells are marked
     as visited so maze generation does not use them.
     """
-    row0, col0 = pattern_origin(maze)
-
-    too_small = (
-        row0 < 1
-        or col0 < 1
-        or row0 + PAT_H > maze.grid.row - 1
-        or col0 + PAT_W > maze.grid.colm - 1
-    )
-    if too_small:
+    if too_small(maze):
         print("Error: maze too small for the 42 pattern, it will be omitted.")
         return
 
