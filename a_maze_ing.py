@@ -6,6 +6,7 @@ from mazegen.output_file import output_file
 from renderer import convert_to_binary, put_the_walls, border
 from renderer import print_canvas
 
+
 # CHRISMAS theme
 GREEN = "\033[48;2;161;148;127m"
 DARK_GREEN = "\033[48;2;50;78;38m"
@@ -67,6 +68,8 @@ def main_maze() -> None:
     show = False
     theme = 0
     value = 0
+    notice = "Error: maze too small for the 42 pattern, it will be omitted."
+
     try:
         maze.generator()
 
@@ -86,7 +89,7 @@ def main_maze() -> None:
             value
         )
         print("\033[0m\033[H\033[2J", end="")
-        print_canvas(borde)
+        print_canvas(borde, notice, maze)
 
         while True:
             user = input("1] press 1 to Re-generate a new maze\n"
@@ -115,7 +118,7 @@ def main_maze() -> None:
                 )
 
                 print("\033[0m\033[H\033[2J", end="")
-                print_canvas(borde)
+                print_canvas(borde, notice, maze)
 
             elif user == "2":
                 show = not show
@@ -137,7 +140,7 @@ def main_maze() -> None:
                     value
                 )
                 print("\033[0m\033[H\033[2J", end="")
-                print_canvas(borde)
+                print_canvas(borde, notice, maze)
 
             elif user == "3":
                 print("\nTHE AVAILABLE THEMES:")
@@ -166,7 +169,7 @@ def main_maze() -> None:
                 )
 
                 print("\033[0m\033[H\033[2J", end="")
-                print_canvas(borde)
+                print_canvas(borde, notice, maze)
             elif user == "4":
                 print("OOPs! -YOU EXIT THE PROGRAM-")
                 sys.exit()

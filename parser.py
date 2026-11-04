@@ -3,6 +3,7 @@ import sys
 from typing import Any
 from pathlib import Path
 
+
 def perfect_parser(char: str) -> bool:
     """Converts a string into a boolean value."""
     char = char.strip().lower()
@@ -32,6 +33,7 @@ def entry_exit(c: str) -> tuple[int, int]:
         raise ValueError("Values must be non-negative!")
     # must parse the case when both are zeros and parse the seed!!!!!
     return x, y
+
 
 def parsing(file_path: str) -> dict[str, Any]:
     """Reads, parses, and validates the maze configuration file."""
@@ -96,7 +98,6 @@ def parsing(file_path: str) -> dict[str, Any]:
         # SEED not provided -> no fixed seed
         config.setdefault("SEED", None)
         # Parse WIDTH and HEIGHT
-        
         try:
             config["WIDTH"] = int(config["WIDTH"])
             config["HEIGHT"] = int(config["HEIGHT"])
@@ -106,7 +107,9 @@ def parsing(file_path: str) -> dict[str, Any]:
             raise ValueError("WIDTH and HEIGHT must be positive!")
         if config["WIDTH"] < 3 or config["HEIGHT"] < 3:
             raise ValueError("MAZE cannot be smaller than 4*4 cells")
-        
+        if config["WIDTH"] > 20 or config["HEIGHT"] > 20:
+            raise ValueError("MAZE IS HUGE!,pick height and width under 20!")
+
         required_width = config["WIDTH"] * 4 + 2
         required_height = config["HEIGHT"] * 2 + 1
         width = required_width
@@ -116,11 +119,12 @@ def parsing(file_path: str) -> dict[str, Any]:
         config["PERFECT"] = perfect_parser(config["PERFECT"])
 
         # Check OUTPUT_FILE
+        otpt = config["OUTPUT_FILE"]
         if not config["OUTPUT_FILE"]:
             raise ValueError("OUTPUT_FILE cannot be empty!")
-        p = Path(config["OUTPUT_FILE"])
+        p = Path(otpt)
         if p.suffix.lower() != ".txt":
-            raise ValueError(f"'{config["OUTPUT_FILE"]}' must have a .txt extension")
+            raise ValueError(f"'{otpt}' must have a .txt extension")
 
         # Parse ENTRY and EXIT
         config["ENTRY"] = entry_exit(config["ENTRY"])
@@ -140,12 +144,12 @@ def parsing(file_path: str) -> dict[str, Any]:
         #  checkin the the border of the exit inside the maze
         if not (0 <= ext[0] < width and 0 <= ext[1] < height):
             raise ValueError("EXIT is outside the maze!")
-        
+
         # to prevent the user from zooming in or out so much that
         # the terminal becomes unsuitable for displaying the maze.
 
         terminal_width, terminal_height = shutil.get_terminal_size()
-        if (required_width > terminal_width 
+        if (required_width > terminal_width
                 or required_height > terminal_height):
             raise RuntimeError("Terminal is too small to display the maze!")
 

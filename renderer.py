@@ -81,10 +81,14 @@ def convert_to_binary(output_file: str) -> list[str]:
     preserving ANSI colors and formatting."""
 
 
-def print_canvas(canvas: list[list[str]]) -> None:
+def print_canvas(canvas: list[list[str]],
+                 msg: str | None,
+                 maze: "MazeGenerator") -> None:
     for row in canvas:
         print("".join(cell * 2 for cell in row) + RESET)
         print(RESET, end="")
+    if too_small(maze):
+        print(msg)
 
 
 """Convert each cell's binary wall
@@ -96,8 +100,10 @@ def put_the_walls(binary: list[str]) -> list[list[str]]:
     walls = []
     for i in binary:
         value = int(i, 2)
-        walls.append([d for d, bit in (("N", 1), ("E", 2), ("S", 4), ("W", 8)) if value & bit])
+        walls.append([d for d, bit in (("N", 1), ("E", 2), ("S", 4), ("W", 8))
+                      if value & bit])
     return walls
+
 
 # fixing corners after rendering the border and tha walls
 def fix_junctions(canvas: list[list[str]]) -> list[list[str]]:
@@ -353,8 +359,8 @@ def rendering(canvas: list[list[str]],
         canvas_row = cell_row * 2 + 1
         canvas_col = cell_col * 2 + 1
 
-        if (canvas_row >= len(canvas) 
-            or canvas_col >= len(canvas[0])):
+        if (canvas_row >= len(canvas)
+                or canvas_col >= len(canvas[0])):
             raise ValueError(
                 f"Cell {cell_number} is outside the canvas!"
             )

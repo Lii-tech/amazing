@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+
 if TYPE_CHECKING:
     from .maze_generator import MazeGenerator
 
@@ -51,6 +52,7 @@ def in_42_pattern(maze: "MazeGenerator", point: tuple[int, int]) -> bool:
     """
     return point in pattern_cells(maze)
 
+
 def too_small(maze: "MazeGenerator") -> bool:
     """ Skips the pattern if the maze is too small."""
     row0, col0 = pattern_origin(maze)
@@ -61,6 +63,7 @@ def too_small(maze: "MazeGenerator") -> bool:
         or col0 + PAT_W > maze.grid.colm - 1
     )
 
+
 def check_42(maze: "MazeGenerator") -> None:
     """
     Check the maze size and reserve the 42 pattern.
@@ -70,7 +73,6 @@ def check_42(maze: "MazeGenerator") -> None:
     as visited so maze generation does not use them.
     """
     if too_small(maze):
-        print("Error: maze too small for the 42 pattern, it will be omitted.")
         return
 
     cells = pattern_cells(maze)

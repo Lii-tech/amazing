@@ -8,6 +8,7 @@ if TYPE_CHECKING:
 # bit 0 = North, bit 1 = East, bit 2 = South, bit 3 = West
 WALL_BITS = {"N": 1, "E": 2, "S": 4, "W": 8}
 
+
 def convert_path(path: list[tuple[int, int]]) -> str:
     """
     Convert a coordinate path into movement directions.
