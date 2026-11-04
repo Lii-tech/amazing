@@ -303,6 +303,13 @@ def border(maze: "MazeGenerator",
     bg = color[5][theme]
     binary = convert_to_binary(file)
     draw_wall = put_the_walls(binary)
+
+    expected_cells = maze.grid.row * maze.grid.colm
+    if len(draw_wall) != expected_cells:
+        raise ValueError(
+            f"Invalid maze file: expected {expected_cells} cells, "
+            f"but found {len(draw_wall)}."
+        )
     canvas = rendering(canvas, maze, path, draw_wall,
                        maze.grid.row, maze.grid.colm,
                        color, theme, value)
@@ -339,13 +346,18 @@ def rendering(canvas: list[list[str]],
         The updated maze canvas.
     """
 
-    maze_cols = cols
+    maze_cols = maze.grid.colm
     for cell_number, walls in enumerate(draw_wall):
         cell_row = cell_number // maze_cols
         cell_col = cell_number % maze_cols
         canvas_row = cell_row * 2 + 1
         canvas_col = cell_col * 2 + 1
 
+        if (canvas_row >= len(canvas) 
+            or canvas_col >= len(canvas[0])):
+            raise ValueError(
+                f"Cell {cell_number} is outside the canvas!"
+            )
         for direct in walls:
             if direct == "N":
                 canvas[canvas_row - 1][canvas_col] = Chars.HL.value

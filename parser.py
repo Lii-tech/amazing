@@ -1,7 +1,7 @@
-# this is only for testing
+import shutil
 import sys
 from typing import Any
-
+from pathlib import Path
 
 def perfect_parser(char: str) -> bool:
     """Converts a string into a boolean value."""
@@ -32,7 +32,6 @@ def entry_exit(c: str) -> tuple[int, int]:
         raise ValueError("Values must be non-negative!")
     # must parse the case when both are zeros and parse the seed!!!!!
     return x, y
-
 
 def parsing(file_path: str) -> dict[str, Any]:
     """Reads, parses, and validates the maze configuration file."""
@@ -66,15 +65,18 @@ def parsing(file_path: str) -> dict[str, Any]:
 
             if key not in allowed:
                 raise ValueError(f"Unknown key: {key}")
+            if key in req:
+                if val.lower() in ("none", ""):
+                    raise ValueError(f"KEY {key} IS NEEDED!")
 
             if key == "SEED":
-                if val.lower() in ("none", ""):
+                if val.lower() == "none":
                     config[key] = None
                 else:
                     try:
                         seed = int(val)
                     except ValueError:
-                        raise ValueError("SEED must be an integer!")
+                        raise ValueError("SEED must be Valued!")
                     if seed < 0:
                         print(
                             "Warning! Negative and positive seed number "
@@ -94,17 +96,21 @@ def parsing(file_path: str) -> dict[str, Any]:
         # SEED not provided -> no fixed seed
         config.setdefault("SEED", None)
         # Parse WIDTH and HEIGHT
+        
         try:
             config["WIDTH"] = int(config["WIDTH"])
             config["HEIGHT"] = int(config["HEIGHT"])
         except ValueError:
             raise ValueError("WIDTH and HEIGHT must be integers!")
-
         if config["WIDTH"] <= 0 or config["HEIGHT"] <= 0:
             raise ValueError("WIDTH and HEIGHT must be positive!")
-
-        width = config["WIDTH"]
-        height = config["HEIGHT"]
+        if config["WIDTH"] < 3 or config["HEIGHT"] < 3:
+            raise ValueError("MAZE cannot be smaller than 4*4 cells")
+        
+        required_width = config["WIDTH"] * 4 + 2
+        required_height = config["HEIGHT"] * 2 + 1
+        width = required_width
+        height = required_height
 
         # Parse PERFECT
         config["PERFECT"] = perfect_parser(config["PERFECT"])
@@ -112,6 +118,9 @@ def parsing(file_path: str) -> dict[str, Any]:
         # Check OUTPUT_FILE
         if not config["OUTPUT_FILE"]:
             raise ValueError("OUTPUT_FILE cannot be empty!")
+        p = Path(config["OUTPUT_FILE"])
+        if p.suffix.lower() != ".txt":
+            raise ValueError(f"'{config["OUTPUT_FILE"]}' must have a .txt extension")
 
         # Parse ENTRY and EXIT
         config["ENTRY"] = entry_exit(config["ENTRY"])
@@ -131,7 +140,16 @@ def parsing(file_path: str) -> dict[str, Any]:
         #  checkin the the border of the exit inside the maze
         if not (0 <= ext[0] < width and 0 <= ext[1] < height):
             raise ValueError("EXIT is outside the maze!")
-        # checkin any error could occuar during the compilation
+        
+        # to prevent the user from zooming in or out so much that
+        # the terminal becomes unsuitable for displaying the maze.
+
+        terminal_width, terminal_height = shutil.get_terminal_size()
+        if (required_width > terminal_width 
+                or required_height > terminal_height):
+            raise RuntimeError("Terminal is too small to display the maze!")
+
+    # checkin any error could occuar during the compilation
     except FileNotFoundError:
         print(f"Error: The configuration file '{file_path}' was not found!")
         sys.exit(1)

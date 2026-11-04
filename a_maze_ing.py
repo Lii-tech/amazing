@@ -71,16 +71,16 @@ def main_maze() -> None:
         maze.generator()
 
         path = shortest_path(maze)
-        output_file(maze, "output_maze.txt", path)
+        output_file(maze, config["OUTPUT_FILE"], path)
 
-        binary = convert_to_binary("output_maze.txt")
+        binary = convert_to_binary(config["OUTPUT_FILE"])
         draw_wall = put_the_walls(binary)
 
         borde = border(
             maze,
             path,
             draw_wall,
-            "output_maze.txt",
+            config["OUTPUT_FILE"],
             color,
             theme,
             value
@@ -97,9 +97,9 @@ def main_maze() -> None:
                 maze.generator()
 
                 path = shortest_path(maze)
-                output_file(maze, "output_maze.txt", path)
+                output_file(maze, config["OUTPUT_FILE"], path)
 
-                binary = convert_to_binary("output_maze.txt")
+                binary = convert_to_binary(config["OUTPUT_FILE"])
                 draw_wall = put_the_walls(binary)
                 show = False
                 value = 0
@@ -108,7 +108,7 @@ def main_maze() -> None:
                     maze,
                     path,
                     draw_wall,
-                    "output_maze.txt",
+                    config["OUTPUT_FILE"],
                     color,
                     theme,
                     value
@@ -131,7 +131,7 @@ def main_maze() -> None:
                     maze,
                     path,
                     draw_wall,
-                    "output_maze.txt",
+                    config["OUTPUT_FILE"],
                     color,
                     theme,
                     value
@@ -159,7 +159,7 @@ def main_maze() -> None:
                     maze,
                     path,
                     draw_wall,
-                    "output_maze.txt",
+                    config["OUTPUT_FILE"],
                     color,
                     theme,
                     value

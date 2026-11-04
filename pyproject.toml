@@ -8,7 +8,7 @@ version = "1.0.0"
 description = "Maze generator and solver"
 readme = "README.md"
 authors = [
-    {name = "naalorsan", email = "amal.alorsan@learner.42.tech"},
+    {name = "naalorsan", email = "amal.orsan@learner.42.tech"},
     {name = "leobeida", email = "leen.obeidat@learner.42.tech"}
 ]
 
